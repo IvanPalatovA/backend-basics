@@ -2,8 +2,6 @@ from datetime import date
 
 from src.exceptions import TaskNotFoundError
 from src.logger import logger
-
-
 from src.models import Task
 
 
