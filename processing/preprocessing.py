@@ -60,9 +60,7 @@ def get_struct_weather(city: str) -> weather_info:
 def get_struct_rate(curr: str) -> rates_info:
     raw_ans = get_raw_rates(curr)
     rate: float = raw_ans["rate"]
-    ans = rates_info(
-        currency=curr, rates_to_rub=rate, espensive=(True if rate > 100 else False)
-    )
+    ans = rates_info(currency=curr, rates_to_rub=rate, espensive=(rate > 100))
     logger_API.info("preprocessing корректно обработал курс валют")
     return ans
 
