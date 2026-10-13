@@ -2,6 +2,7 @@ import argparse
 import sys
 
 from processing.service import build_city_summary
+from src.exceptions import CityNotFound, СurrencyNotFound, retryFailed
 
 
 def main() -> int:
@@ -12,22 +13,21 @@ def main() -> int:
         default="usd",
         help="Валюта по отношению к рублю",
     )
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
+    except argparse.ArgumentError as err:
+        print(f"ошибка {err}")
+        return 2
     try:
         text = build_city_summary(args.city, args.currency)
         print(text)
         return 0
-    except Exception:
-        return 1
-
-    # tasks_by_id: dict[int, Task] = {}
-    # task = create_task(
-    #     tasks_by_id,
-    #     title="Подготовить README",
-    #     description="Добавить инструкцию запуска проекта",
-    #     due_date=date(2027, 6, 30),
-    # )
-    # print(get_task(tasks_by_id, task.id))
+    except (CityNotFound, СurrencyNotFound) as err:
+        print(f"ошибка {err}")
+        return 3
+    except retryFailed as err:
+        print(f"ошибка {err}")
+        return 4
 
 
 if __name__ == "__main__":
